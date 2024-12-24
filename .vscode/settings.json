@@ -1,0 +1,12 @@
+{
+    "stm32-for-vscode.openOCDPath": false,
+    "stm32-for-vscode.makePath": false,
+    "stm32-for-vscode.armToolchainPath": false,
+    "files.associations": {
+        "can-bridge-firmware.h": "c",
+        "inverters.h": "c",
+        "batteries.h": "c",
+        "can-remap.h": "c",
+        "user_settings.h": "c"
+    }
+}
