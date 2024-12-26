@@ -2,8 +2,9 @@
 #define USER_SETTINGS_H
 
 /* Select Mode */
-#define INVERTER_ALLOWLIST
+//#define INVERTER_ALLOWLIST
 //#define BATTERY_REMAP
+#define BLOCK_NON_EXTENDED_IDS
 
 /* Select Inverter used */
 //#define SMA

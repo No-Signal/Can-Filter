@@ -18,6 +18,7 @@ To specify which inverter you are using uncomment the relevant #define in the US
 /* Select Mode */
 #define INVERTER_ALLOWLIST
 //#define BATTERY_REMAP
+//#define BLOCK_NON_EXTENDED_IDS
 
 /* Select Inverter used */
 //#define SMA
@@ -39,6 +40,7 @@ The connected battery will receive messages on the expected IDs while the Batter
 /* Select Mode */
 //#define INVERTER_ALLOWLIST
 #define BATTERY_REMAP
+//#define BLOCK_NON_EXTENDED_IDS
 
 /* Select Inverter used */
 //#define SMA

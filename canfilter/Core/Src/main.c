@@ -92,7 +92,7 @@ int main(void)
       }
     }
 
-#ifdef INVERTER_ALLOWLIST
+
 
     // From Battery Emulator
     if (LenCan(MYCAN1, CAN_RX) > 0)
@@ -101,8 +101,16 @@ int main(void)
 
       // Send all messages to the battery emulator
       PopCan(MYCAN1, CAN_RX, &frame);
-      can_filter(MYCAN2, &frame);
 
+#ifdef INVERTER_ALLOWLIST
+      can_filter_allow_list(MYCAN2, &frame);
+#endif
+#ifdef BATTERY_REMAP
+      can_handler_to_battery(MYCAN2, &frame);
+#endif
+#ifdef BLOCK_NON_EXTENDED_IDS
+      can_filter_extended_ids_only(MYCAN2, &frame);
+#endif
     }
 
     // From Inverter
@@ -112,29 +120,15 @@ int main(void)
 
       // Filter messages to inverter using allow list
       PopCan(MYCAN2, CAN_RX, &frame);
+
+#if defined(INVERTER_ALLOWLIST) || defined(BLOCK_NON_EXTENDED_IDS)
       PushCan(MYCAN1, CAN_TX, &frame);
-    }
 #endif
-
 #ifdef BATTERY_REMAP
-    // From Battery Emulator
-    if (LenCan(MYCAN1, CAN_RX) > 0)
-    {
-      idleTick = 0;
-
-      PopCan(MYCAN1, CAN_RX, &frame);
-      can_handler_to_battery(MYCAN2, &frame);
-    }
-
-    // From Inverter
-    if (LenCan(MYCAN2, CAN_RX) > 0)
-    {
-      idleTick = 0;
-
-      PopCan(MYCAN2, CAN_RX, &frame);
       can_handler_to_battery_emulator(MYCAN1, &frame);
-    }
 #endif
+
+    }
 
     sendCan(MYCAN1);
     sendCan(MYCAN2);

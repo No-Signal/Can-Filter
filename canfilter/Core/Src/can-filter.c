@@ -3,7 +3,7 @@
 #include "can-filter.h"
 #include "Inverters.h"
 
-void can_filter(uint8_t can_bus, CAN_FRAME *frame)
+void can_filter_allow_list(uint8_t can_bus, CAN_FRAME *frame)
 {
    uint8_t allowed = 0;
 
@@ -20,4 +20,11 @@ void can_filter(uint8_t can_bus, CAN_FRAME *frame)
    {
       PushCan(can_bus, CAN_TX, frame);
    }
+}
+
+void can_filter_extended_ids_only(uint8_t can_bus, CAN_FRAME *frame)
+{
+	if(frame->ide){
+		PushCan(can_bus, CAN_TX, frame);
+	}
 }
