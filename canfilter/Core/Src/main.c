@@ -55,7 +55,7 @@ int main(void)
   MX_CAN1_Init();
   MX_CAN2_Init();
 
-  //MX_IWDG_Init(); //Init watchdog
+  MX_IWDG_Init(); //Init watchdog
 
   HAL_CAN_RegisterCallback(&hcan1, HAL_CAN_RX_FIFO0_MSG_PENDING_CB_ID, HAL_CAN_RxFIFO0MsgPendingCallback1);
   HAL_CAN_RegisterCallback(&hcan1, HAL_CAN_RX_FIFO1_MSG_PENDING_CB_ID, HAL_CAN_RxFIFO1MsgPendingCallback1);
@@ -70,7 +70,7 @@ int main(void)
 
   while (1)
   {
-    //HAL_IWDG_Refresh(&hiwdg);
+    HAL_IWDG_Refresh(&hiwdg);
 
     if ((HAL_GetTick() - last_tick) >= 1000u)
     {
@@ -92,14 +92,11 @@ int main(void)
       }
     }
 
-
-
     // From Battery Emulator
     if (LenCan(MYCAN1, CAN_RX) > 0)
     {
       idleTick = 0;
 
-      // Send all messages to the battery emulator
       PopCan(MYCAN1, CAN_RX, &frame);
 
 #ifdef INVERTER_ALLOWLIST
@@ -118,7 +115,6 @@ int main(void)
     {
       idleTick = 0;
 
-      // Filter messages to inverter using allow list
       PopCan(MYCAN2, CAN_RX, &frame);
 
 #if defined(INVERTER_ALLOWLIST) || defined(BLOCK_NON_EXTENDED_IDS)
@@ -127,7 +123,6 @@ int main(void)
 #ifdef BATTERY_REMAP
       can_handler_to_battery_emulator(MYCAN1, &frame);
 #endif
-
     }
 
     sendCan(MYCAN1);
