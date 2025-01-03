@@ -26,10 +26,6 @@
 #include "can-remap.h"
 #include "USER_SETTINGS.h"
 
-static uint32_t last_tick = 0;
-static const uint8_t au8_lock[12] = {0x33, 0x44, 0x55, 0x66, 0x11, 0x22, 0x33, 0x44, 0x77, 0x66, 0x55, 0x44};
-static uint8_t idleTick = 0;
-
 void SystemClock_Config(void);
 
 int main(void)
@@ -46,16 +42,11 @@ int main(void)
   /* Configure the system clock */
   SystemClock_Config();
 
-  if (strncmp(STM32_UUID, (const char *)au8_lock, 12) != 0)
-  {
-    NVIC_SystemReset();
-  }
-
   MX_GPIO_Init();
   MX_CAN1_Init();
   MX_CAN2_Init();
 
-  MX_IWDG_Init(); //Init watchdog
+  //MX_IWDG_Init(); //Init watchdog
 
   HAL_CAN_RegisterCallback(&hcan1, HAL_CAN_RX_FIFO0_MSG_PENDING_CB_ID, HAL_CAN_RxFIFO0MsgPendingCallback1);
   HAL_CAN_RegisterCallback(&hcan1, HAL_CAN_RX_FIFO1_MSG_PENDING_CB_ID, HAL_CAN_RxFIFO1MsgPendingCallback1);
@@ -70,33 +61,11 @@ int main(void)
 
   while (1)
   {
-    HAL_IWDG_Refresh(&hiwdg);
-
-    if ((HAL_GetTick() - last_tick) >= 1000u)
-    {
-      // 1 Second has passed
-      last_tick = HAL_GetTick();
-
-      if ((LenCan(MYCAN1, CAN_RX)) == 0 && (LenCan(MYCAN2, CAN_RX) == 0))
-      {
-        // Can bus is idle
-        idleTick++;
-
-        if (idleTick > 5)
-        { // No can messages for 5s
-          HAL_SuspendTick();
-          HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
-          HAL_ResumeTick();
-          idleTick = 0;
-        }
-      }
-    }
+    //HAL_IWDG_Refresh(&hiwdg);
 
     // From Battery Emulator
     if (LenCan(MYCAN1, CAN_RX) > 0)
     {
-      idleTick = 0;
-
       PopCan(MYCAN1, CAN_RX, &frame);
 
 #ifdef INVERTER_ALLOWLIST
@@ -113,8 +82,6 @@ int main(void)
     // From Inverter
     if (LenCan(MYCAN2, CAN_RX) > 0)
     {
-      idleTick = 0;
-
       PopCan(MYCAN2, CAN_RX, &frame);
 
 #if defined(INVERTER_ALLOWLIST) || defined(BLOCK_NON_EXTENDED_IDS)

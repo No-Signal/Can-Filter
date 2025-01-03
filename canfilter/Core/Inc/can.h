@@ -46,7 +46,7 @@ extern "C"
 
     /* USER CODE BEGIN Prototypes */
 
-#define CAN_QUEUE 16
+#define CAN_QUEUE 32
 
 #define MYCAN1 0
 #define MYCAN2 1

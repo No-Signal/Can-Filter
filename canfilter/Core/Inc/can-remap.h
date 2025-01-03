@@ -3,6 +3,7 @@
 
 #include "main.h"
 #include "can.h"
+#include "USER_SETTINGS.h"
 
 #ifdef BATTERY_REMAP
 void can_handler_to_battery(uint8_t can_bus, CAN_FRAME *frame);

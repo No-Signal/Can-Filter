@@ -423,7 +423,7 @@ CQ_STATUS PushCan(uint8_t canNum, uint8_t TxRx, CAN_FRAME *frame)
     retVal = CQ_OK;
   }
 
-  sendCan(canNum);
+  //sendCan(canNum);
 
   return retVal;
 }
