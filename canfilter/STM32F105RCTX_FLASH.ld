@@ -58,6 +58,13 @@ SECTIONS
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
   } >FLASH
+  
+  .lock :
+  {
+  	. = ALIGN(4);
+  	KEEP(*(.lock))
+  	. = ALIGN(4);
+  }>FLASH
 
   /* The program code and other data into "FLASH" Rom type memory */
   .text :

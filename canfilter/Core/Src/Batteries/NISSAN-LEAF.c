@@ -20,7 +20,6 @@ uint32_t allowed_to_battery_emulator[] = {
     0x59E,
     0x1ED,
     0x1C2,
-    0x79B,
     0x7BB
 };
 

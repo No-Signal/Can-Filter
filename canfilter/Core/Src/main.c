@@ -26,6 +26,8 @@
 #include "can-remap.h"
 #include "USER_SETTINGS.h"
 
+static const uint8_t au8_lock[12] __attribute__((section(".lock"), used)) = {0x33, 0x44, 0x55, 0x66, 0x11, 0x22, 0x33, 0x44, 0x77, 0x66, 0x55, 0x44};
+
 void SystemClock_Config(void);
 
 int main(void)
